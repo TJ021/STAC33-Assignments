@@ -1,0 +1,70 @@
+---
+title: "Assignment 3"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+---
+
+```{r message = F}
+library(tidyverse)
+```
+
+a)
+```{r}
+heads <- 80
+coin_tosses <- 125
+
+prop.test(heads, coin_tosses)
+```
+Since the p-value is less than 0.05, we reject the null hypothesis and conclude that the coin is biased in favour of heads.
+
+b)
+```{r}
+heads <- 73
+coin_tosses <- 125
+p <- 0.5
+alternative <- "greater"
+
+prop.test(heads, coin_tosses, p, alternative)
+```
+Through trial and error, the coin must show heads atleast 73 times out of 125 coin tosses to reject H0: p=0.5 in favour of Ha: p>0.5 since the C.I. then has a lower bound of p>0.5.
+
+c)
+```{r}
+n <- 4
+p <- 0.3
+i <- 1
+
+while (i <= 10){
+  r = rbinom(i, n, p)
+  print(r)
+  i = i + 1
+}
+```
+From the 10 random samples, We can conclude that the trials are between 0 and the specified value with a probablility of each number showing up as p=0.3 and the amount of trials are n=4. rbinom seems to simulate the outcome of random bernoulli trials.
+
+d)
+```{r}
+n <- 125
+p <- 0.6
+mean <- n*p
+sd <- sqrt(n*p*(1-p))
+
+my.sample = function()
+  {
+  r = rnorm(n, mean, sd)
+  t = t.test(r, mu = 75)
+  t$p.value < 0.05
+}
+
+simulation = replicate(100, my.sample())
+count = table(simulation)
+power = count/n
+
+count
+power
+```
+From the "simulation" we can see that the estimate for the power of the z-test is 0.104 for a proportion to reject H0: p=0.5 in favour of Ha: p>0.5 when the probability is 0.6.
+

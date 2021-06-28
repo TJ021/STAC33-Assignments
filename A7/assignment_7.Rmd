@@ -1,0 +1,49 @@
+---
+title: "TJ's Notebook"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+---
+
+```{r}
+library(tidyverse)
+```
+
+#2.
+a)
+```{r}
+my_url = "http://ritsokiguess.site/STAC33/sat.csv"
+MyData = read_csv(my_url)
+MyData
+```
+There are 162 students since there are 162 rows in this data set.
+
+b)
+```{r}
+ggplot(MyData, aes(verbal_sat, math_sat)) + geom_point() + facet_wrap(~sex) + geom_smooth(se = F)
+```
+
+c)
+The graph for female students seems to start to curving upwards around the middle, whereas the graph for male students curves upwards and downwords at the tails of the linear model. Both graphs show that the relation between `verbal_sat` and `math_sat` is moderate.
+
+
+d)
+```{r}
+ggplot(MyData, aes(verbal_sat, math_sat)) + geom_point() + facet_wrap(~sex) + geom_smooth(method = lm, se = F)
+```
+
+e)
+```{r}
+MyData_lm <- lm(math_sat ~ verbal_sat, data = MyData)
+summary(MyData_lm)
+```
+We can see that the residual squared is only ~0.46, so there is a relationship between `math_sat` and `verbal_sat` but it's weak.
+
+f)
+```{r}
+ggplot(MyData_lm, aes(y = .resid, x = .fitted)) + geom_point()
+```
+
+From the summary of the linear model, we can see that `verbal_sat` is significant and the residual error is low. From the graph we can see that the residual plot is all random with no trend. the points also seem to be scattered around 0 on the x-axis. Using this information, we can conclude that the model is good at predicting true SAT scores.

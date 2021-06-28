@@ -1,0 +1,42 @@
+---
+title: "TJ's Notebook"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+---
+
+```{r}
+library(tidyverse)
+```
+
+#2.
+a)
+```{r}
+MyData <- read_csv("xgrades.csv")
+MyData
+```
+
+
+b)
+```{r}
+MyData %>% 
+  pivot_longer(Fall:Winter, names_to = "Quarter", values_to = "Grade") %>% 
+  pivot_wider(names_from = Test, values_from = Grade) %>% 
+  arrange(-desc(Year), Quarter) -> 
+  NewData
+NewData
+```
+- pivot_longer will allow us to create a new variable `Quarter` that contains the old variables `Fall`, `Spring`, and `Winter`.
+- pivot_wider will allow us to separate the values in `Test` and make 2 new variables `Math` and `Writing`.
+- arrange will allow us to arrange the values of the table with respect to Year in descending order.
+
+#3.
+a)
+```{r}
+my_url = "http://www.utsc.utoronto.ca/~butler/assgt_data/rl.txt"
+MyData2 = read.csv(my_url, header = FALSE, sep = ",")
+MyData2
+```
+

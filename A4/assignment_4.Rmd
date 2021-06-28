@@ -1,0 +1,67 @@
+---
+title: "TJ's Notebook"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+---
+
+```{r message = F}
+library(tidyverse)
+library(devtools)
+install_github("nxskok/smmr")
+library(smmr)
+library(PMCMRplus)
+```
+
+a)
+```{r}
+MyData <- read_excel("Canadian_Equity_Funds.xls")
+MyData
+```
+Here we can see there are 60 rows of data, and 10 variables.
+
+b)
+```{r}
+NewData = drop_na(MyData, Assets)
+NewData
+```
+All the null values have been removed from the table and theres now 54 rows of data instead of 60.
+
+c)
+```{r}
+ggplot(NewData, aes(x = Assets)) + geom_histogram(bins = 10)
+```
+A sign test for the median is better since there would be an equal amount of values on both sides of the median, whereas a t-test would be centered around the mean which would take the average of the values.
+
+d)
+```{r}
+above = 0
+below = 0
+
+for (asset in NewData$Assets){
+  if (asset > 55){
+    above = above + 1
+  }
+  else if (asset < 55){
+    below = below + 1
+  }
+}
+
+above
+below
+```
+I would expect a sign test to reject the null median of 55 since there more than double the values are below 55 then above. Therefore, the null meadian from a sign test should be lower.
+
+e)
+```{r}
+sign_test(NewData, Assets, 55)
+```
+
+
+f)
+```{r}
+ci_median(NewData, Assets)
+```
+The value 55 is outside of the 95% CI.

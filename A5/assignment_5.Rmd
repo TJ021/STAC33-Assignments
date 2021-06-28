@@ -1,0 +1,50 @@
+---
+title: "TJ's Notebook"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+---
+
+```{r message = F}
+library(tidyverse)
+library(devtools)
+install_github("nxskok/smmr")
+library(smmr)
+```
+
+a)
+```{r}
+MyData <- read_csv("moon.csv")
+MyData
+```
+
+b)
+
+This is a matched pair experiment since the independent variable `patient` has 2 dependant variables(`moonday` and `otherday`) associated with it. Therefore, each x-value will be associated with 2 y-values.
+
+c)
+```{r}
+ggplot(MyData, aes(x = patient, y = (moonday - otherday))) + geom_point()
+```
+
+The principal assumption is that the difference of the matched pairs follow a normal distribution.
+
+d)
+```{r}
+with(MyData, t.test(moonday, otherday, paired = T))
+```
+The differences of `moonday` and `otherday` are between 1.623968 and 3.241365, with the mean of the difference being 2.432667. Since the p-value is below 0.05, we reject the null hypothesis.
+
+e)
+```{r}
+MyData %>% mutate(MyDiff = moonday - otherday) %>%
+sign_test(MyDiff, 0)
+```
+Since we are testing for higher aggressive behaviour on days closer to a full moon, we use the upper p-value. Since the upper p-value is 0.0004882812 and is less than 0.05, we reject the null hypothesis.
+
+f)
+
+A signed test is better since the scatterplot graph shows that the difference between moonday and otherday isn't normally distributed since there are outliers. Therefore, we shouldn't use a t-test, and use a sign test instead.
+
